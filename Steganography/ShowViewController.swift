@@ -7,23 +7,33 @@
 
 import UIKit
 
-class ShowViewController: UIViewController {
+class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var buttonChooseImage: UIButton!
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var labelMessage: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        buttonChooseImage.clipsToBounds = true
+        buttonChooseImage.layer.cornerRadius = 10
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func presentPicker(with sourceType: UIImagePickerController.SourceType) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = sourceType
+        present(picker, animated: true)
     }
-    */
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
 
+        let image = info[.originalImage] as! UIImage
+        self.imageView.image = image
+        //Call to show message
+    }
+    
+    @IBAction func clickChooseImage(_ sender: Any) {
+        presentPicker(with: .photoLibrary)
+    }
 }
