@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		148072BD2656DF5000E2873B /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148072BC2656DF5000E2873B /* ImageSaver.swift */; };
+		148072BF2656F88F00E2873B /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148072BE2656F88F00E2873B /* Encoder.swift */; };
 		7405C26C263B1F97005B3553 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7405C26B263B1F97005B3553 /* AppDelegate.swift */; };
 		7405C26E263B1F97005B3553 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7405C26D263B1F97005B3553 /* SceneDelegate.swift */; };
 		7405C270263B1F97005B3553 /* HideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7405C26F263B1F97005B3553 /* HideViewController.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		148072BC2656DF5000E2873B /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		148072BE2656F88F00E2873B /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		7405C268263B1F97005B3553 /* Steganography.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Steganography.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7405C26B263B1F97005B3553 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7405C26D263B1F97005B3553 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 				7405C274263B1F9D005B3553 /* Assets.xcassets */,
 				7405C276263B1F9D005B3553 /* LaunchScreen.storyboard */,
 				7405C279263B1F9D005B3553 /* Info.plist */,
+				148072BC2656DF5000E2873B /* ImageSaver.swift */,
+				148072BE2656F88F00E2873B /* Encoder.swift */,
 			);
 			path = Steganography;
 			sourceTree = "<group>";
@@ -86,6 +92,8 @@
 			dependencies = (
 			);
 			name = Steganography;
+			packageProductDependencies = (
+			);
 			productName = Steganography;
 			productReference = 7405C268263B1F97005B3553 /* Steganography.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +121,8 @@
 				Base,
 			);
 			mainGroup = 7405C25F263B1F97005B3553;
+			packageReferences = (
+			);
 			productRefGroup = 7405C269263B1F97005B3553 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -142,6 +152,8 @@
 			files = (
 				7405C270263B1F97005B3553 /* HideViewController.swift in Sources */,
 				7405C26C263B1F97005B3553 /* AppDelegate.swift in Sources */,
+				148072BF2656F88F00E2873B /* Encoder.swift in Sources */,
+				148072BD2656DF5000E2873B /* ImageSaver.swift in Sources */,
 				7405C26E263B1F97005B3553 /* SceneDelegate.swift in Sources */,
 				743FEF47264CD53A006519C9 /* ShowViewController.swift in Sources */,
 			);
@@ -291,13 +303,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 23MLSK3SZD;
+				DEVELOPMENT_TEAM = 6DS64ZKFJ4;
 				INFOPLIST_FILE = Steganography/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.juandtorres.Steganography;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sroman98.Steganography;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -310,13 +322,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 23MLSK3SZD;
+				DEVELOPMENT_TEAM = 6DS64ZKFJ4;
 				INFOPLIST_FILE = Steganography/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.juandtorres.Steganography;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sroman98.Steganography;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

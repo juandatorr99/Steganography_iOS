@@ -15,8 +15,6 @@ class HideViewController: UIViewController {
     @IBOutlet weak var buttonHide: UIButton!
     @IBOutlet weak var textView: UITextView!
     
-    var imageToHide:UIImage? = nil;
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
@@ -41,7 +39,6 @@ class HideViewController: UIViewController {
         textView!.layer.borderColor = UIColor.lightGray.cgColor
         textView.clipsToBounds = true
         textView.layer.cornerRadius = 10;
-        
     }
     
     @IBAction func clickButtonChoose(_ sender: Any) {
@@ -64,22 +61,14 @@ class HideViewController: UIViewController {
     }
     
     private func hideMessage() {
-        let messageToHide = textView.text
-        let binaryData = Data(messageToHide!.utf8)
-        let stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
-            var transformed = String(byte, radix: 2)
-            while transformed.count < 8 {
-                transformed = "0" + transformed
-            }
-            return acc + " " + transformed
+        var error: NSError?
+        let portingImage = Encoder().getStegoImageFor(image: imageHide.image!, text: textView.text, error: &error)
+        if error == nil {
+            ImageSaver.writeToPhotoAlbum(image: portingImage!)
+            print("SAVED")
+        } else {
+            print(error!.localizedDescription)
         }
-        //        https://stackoverflow.com/questions/31661023/change-color-of-certain-pixels-in-a-uiimage
-        print(stringOf01[0])
-        
-        let cGImageToHide = imageToHide?.cgImage;
-        guard let pixelData = cGImageToHide?.dataProvider?.data,
-              let data = CFDataGetBytePtr(pixelData) else { return }
-        print(data[0]);
     }
     
     private func setupHideKeyboardOnTap() {
@@ -119,7 +108,6 @@ extension HideViewController: UIImagePickerControllerDelegate, UINavigationContr
         
         let image = info[.originalImage] as! UIImage
         imageHide.image = image
-        imageToHide = image
         
         textView.isHidden = false
     }
