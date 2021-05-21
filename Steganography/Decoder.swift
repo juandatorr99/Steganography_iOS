@@ -9,13 +9,14 @@ import UIKit
 
 let DATA_PREFIX = "<m>"
 let DATA_SUFFIX = "</m>"
+let INFO_LENGTH = BYTES_OF_LENGTH * BITS_PER_COMPONENT
 
 class Decoder {
-    private var currentShift: Int = INITIAL_SHIFT
-    private var bitsCharacter: Int = 0
+    private var currentShift: Int?
+    private var bitsCharacter: Int?
     private var text: String?
-    private var step: Int = 0
-    private var length: Int = 0
+    private var step = Int()
+    private var length = Int()
     
     func decodeStegoImage(image: UIImage, error: inout NSError?) -> String? {
         var data: Data? = nil
@@ -61,7 +62,7 @@ class Decoder {
         
         var pixelPosition: Int = 0
         
-        while pixelPosition < BYTES_OF_LENGTH * BITS_PER_COMPONENT {
+        while pixelPosition < INFO_LENGTH {
             getDataWithPixel(pixels[pixelPosition])
             pixelPosition += 1
         }
@@ -95,27 +96,27 @@ class Decoder {
     
     private func getDataWithColor(_ color: Int) {
         let bit: Int = color & 1
-        bitsCharacter = (bit << currentShift) | bitsCharacter
+        bitsCharacter = (bit << currentShift!) | bitsCharacter!
         if currentShift == 0 {
-            if(step < BYTES_OF_LENGTH * BITS_PER_COMPONENT) {
+            if(step < INFO_LENGTH) {
                 getLength()
             } else {
                 getCharacter()
             }
             currentShift = INITIAL_SHIFT
         } else {
-            currentShift -= 1
+            currentShift! -= 1
         }
         step += 1
     }
     
     private func getLength() {
-        length = addBits(length, bitsCharacter, shift: step % (BITS_PER_COMPONENT - 1))
+        length = addBits(length, bitsCharacter!, shift: step % (BITS_PER_COMPONENT - 1))
         bitsCharacter = 0
     }
     
     private func getCharacter() {
-        let character: String = String(bitsCharacter)
+        let character: String = String(Character(UnicodeScalar(bitsCharacter!)!))
         if text != nil {
             text! += character
         } else {
@@ -134,37 +135,42 @@ class Decoder {
         if string == nil {
             return false
         }
-        let range = string!.range(of: substring, options: .caseInsensitive)
+        let string = string! as NSString
+        let range: NSRange? = string.range(of: substring, options: .caseInsensitive)
         if range == nil {
             return false
         }
-        if string!.distance(from: range!.lowerBound, to: range!.upperBound) != 0 {
+        if string.range(of: substring, options: .caseInsensitive).length != 0 {
             return true
         }
         return false
     }
     
+    private func mask8(_ x: Int) -> Int {
+        return x & 0xFF
+    }
+    
     private func addBits(_ number1: Int, _ number2: Int, shift: Int) -> Int {
-        return number1 | (number2 & 0xFF) << 8 * shift
+        return number1 | mask8(number2) << 8 * shift
     }
     
     private func color(_ x: Int, shift: Int) -> Int {
-        return (x >> 8 * shift) & 0xFF
+        return mask8(x >> 8 * shift)
     }
     
     private func substring(string: String?, prefix: String, suffix: String) -> String? {
-        let str: NSString? = string as NSString?
+        let string: NSString? = string as NSString?
         var substring: String? = nil
         
-        if str != nil {
-            let prefixRange: NSRange? = str!.range(of: prefix)
+        if string != nil {
+            let prefixRange: NSRange? = string!.range(of: prefix)
             
             if prefixRange != nil {
-                let suffixRange: NSRange? = str!.range(of: suffix)
+                let suffixRange: NSRange? = string!.range(of: suffix)
                 
                 if suffixRange != nil {
                     let range: NSRange = NSMakeRange(prefixRange!.location + prefixRange!.length, suffixRange!.location - prefixRange!.location - prefixRange!.length)
-                    substring = str!.substring(with: range)
+                    substring = string!.substring(with: range)
                 }
             }
         }
