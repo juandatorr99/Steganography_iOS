@@ -12,6 +12,7 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var buttonChooseImage: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var labelMessage: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         buttonChooseImage.clipsToBounds = true
@@ -30,10 +31,21 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         let image = info[.originalImage] as! UIImage
         self.imageView.image = image
-        //Call to show message
+        
+        showMessage()
     }
     
     @IBAction func clickChooseImage(_ sender: Any) {
         presentPicker(with: .photoLibrary)
+    }
+    
+    private func showMessage() {
+        var error: NSError?
+        let text = Decoder().decodeStegoImage(image: imageView.image!, error: &error)
+        if error != nil {
+            labelMessage.text = error!.description
+        } else {
+            labelMessage.text = text
+        }
     }
 }

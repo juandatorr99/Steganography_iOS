@@ -71,7 +71,7 @@ class Encoder {
     func hide(string: String, inPixels pixels: UnsafeMutablePointer<Int>, withSize size:Int, error: inout NSError?) -> Bool {
         var success = false
         
-        let messageToHide: String = (string.data(using: .utf8)?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))!
+        let messageToHide: String = DATA_PREFIX + (string.data(using: .utf8)?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))! + DATA_SUFFIX
         
         var dataLength: Int = Int(messageToHide.length)
         

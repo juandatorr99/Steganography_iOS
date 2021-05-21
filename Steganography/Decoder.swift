@@ -24,9 +24,7 @@ class Decoder {
             let base64 = substring(string: text, prefix: DATA_PREFIX, suffix: DATA_SUFFIX)
             data = Data(base64Encoded: base64!, options: Data.Base64DecodingOptions(rawValue: 0))
         } else {
-            if error != nil {
-                error = NSError(domain: "ISStegoErrorDomain", code: 3, userInfo: [NSLocalizedDescriptionKey : "There is no data in image"])
-            }
+            error = NSError(domain: "ISStegoErrorDomain", code: 3, userInfo: [NSLocalizedDescriptionKey : "There is no data in image"])
         }
         
         return data != nil ? String(data: data!, encoding: .utf8)! : ""
@@ -132,9 +130,15 @@ class Decoder {
         return text!.length > 0 && contains(string: text, substring: DATA_PREFIX) && contains(string: text, substring: DATA_SUFFIX)
     }
     
-    private func contains(string: String?, substring: String?) -> Bool {
-        let range = string!.range(of: substring!, options: .caseInsensitive)
-        if string != nil && substring != nil && string?.distance(from: range!.lowerBound, to: range!.upperBound) == 0 {
+    private func contains(string: String?, substring: String) -> Bool {
+        if string == nil {
+            return false
+        }
+        let range = string!.range(of: substring, options: .caseInsensitive)
+        if range == nil {
+            return false
+        }
+        if string!.distance(from: range!.lowerBound, to: range!.upperBound) != 0 {
             return true
         }
         return false
