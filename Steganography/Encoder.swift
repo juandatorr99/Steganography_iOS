@@ -11,6 +11,7 @@ let BITS_PER_COMPONENT = 8
 let BYTES_PER_PIXEL = 4
 let BYTES_OF_LENGTH = 4
 let INITIAL_SHIFT = 7
+let MIN_PIXELS = INFO_LENGTH + (DATA_PREFIX.length + DATA_SUFFIX.length) * BITS_PER_COMPONENT
 
 func colorToStep(step: Int) -> Int {
     if (step % 3 == 0) {
@@ -23,10 +24,10 @@ func colorToStep(step: Int) -> Int {
 }
 
 class Encoder {
-    var currentShift = INITIAL_SHIFT
-    var currentCharacter = 0
-    var currentDataToHide = ""
-    var step: Int = 0
+    private var currentShift: Int?
+    private var currentCharacter: Int?
+    private var currentDataToHide: String?
+    private var step = Int()
     
     func getStegoImageFor(image: UIImage, text: String, error: inout NSError?) -> UIImage? {
         let inputCGImage = image.cgImage!
@@ -36,9 +37,9 @@ class Encoder {
         let size = height * width
         
         let pixels = UnsafeMutablePointer<Int>.allocate(capacity: size)
-        var processedImage: UIImage?
+        var processedImage: UIImage? = nil
         
-        if (size >= text.count * 8) {
+        if size >= MIN_PIXELS {
             let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
             
             let context: CGContext = CGContext(data: pixels,
@@ -51,16 +52,14 @@ class Encoder {
             
             context.draw(inputCGImage, in: CGRect(x: 0, y: 0, width: width, height: height))
             
-            let success = self.hide(string: text, inPixels: pixels, withSize: size, error: &error)
+            let success = hide(string: text, inPixels: pixels, withSize: size, error: &error)
             
             if (success) {
                 let newCGImage: CGImage = context.makeImage()!
                 processedImage = UIImage(cgImage: newCGImage)
             }
         } else {
-            if (error != nil) {
-                error = NSError(domain: "ISStegoErrorDomain", code: 2, userInfo: [NSLocalizedDescriptionKey : "Image is too small"])
-            }
+            error = NSError(domain: "ISStegoErrorDomain", code: 2, userInfo: [NSLocalizedDescriptionKey : "Image is too small"])
         }
         
         pixels.deallocate()
@@ -68,26 +67,26 @@ class Encoder {
         return processedImage
     }
     
-    func hide(string: String, inPixels pixels: UnsafeMutablePointer<Int>, withSize size:Int, error: inout NSError?) -> Bool {
+    private func hide(string: String, inPixels pixels: UnsafeMutablePointer<Int>, withSize size:Int, error: inout NSError?) -> Bool {
         var success = false
         
-        let messageToHide: String = DATA_PREFIX + (string.data(using: .utf8)?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))! + DATA_SUFFIX
+        let messageToHide = messageToHide(string: string)
         
-        var dataLength: Int = Int(messageToHide.length)
+        var dataLength = messageToHide.length
         
-        if (dataLength <= INT_MAX
-                && Int(dataLength) * BITS_PER_COMPONENT < size - BYTES_OF_LENGTH * BITS_PER_COMPONENT) {
+        if dataLength <= INT_MAX
+                && dataLength * BITS_PER_COMPONENT < size - INFO_LENGTH {
             reset()
             
             let data: Data = Data(bytes: &dataLength, count: BYTES_OF_LENGTH)
             
             let lengthDataInfo: String = String(data: data, encoding: .ascii)!
             
-            var pixelPosition: Int = 0;
+            var pixelPosition: Int = 0
             
             self.currentDataToHide = lengthDataInfo
             
-            while (pixelPosition < BYTES_OF_LENGTH * BITS_PER_COMPONENT) {
+            while (pixelPosition < INFO_LENGTH) {
                 pixels[pixelPosition] = new(pixel: pixels[pixelPosition])
                 pixelPosition += 1
             }
@@ -98,7 +97,7 @@ class Encoder {
             
             self.currentDataToHide = messageToHide
             
-            let ratio: Int = (size - Int(pixelPosition))/pixelsToHide
+            let ratio: Int = (size - pixelPosition) / pixelsToHide
             
             let salt: Int = ratio;
             
@@ -109,36 +108,35 @@ class Encoder {
             
             success = true
         } else {
-            if (error != nil) {
-                error = NSError(domain: "ISStegoErrorDomain", code: 1, userInfo: [NSLocalizedDescriptionKey : "The data is too big"])
-            }
+            error = NSError(domain: "ISStegoErrorDomain", code: 1, userInfo: [NSLocalizedDescriptionKey : "The data is too big"])
         }
         
         return success;
     }
     
-    func reset() {
+    private func reset() {
         currentShift = INITIAL_SHIFT
         currentCharacter = 0
     }
     
-    func new(pixel: Int) -> Int {
+    private func new(pixel: Int) -> Int {
         let color: Int = new(color: pixel)
         step += 1
         return color
     }
 
-    func new(color: Int) -> Int {
-        if (currentDataToHide.length > currentCharacter) {
-            let asciiCode: UInt8 = currentDataToHide[currentDataToHide.index(currentDataToHide.startIndex, offsetBy: currentCharacter)].asciiValue!
+    private func new(color: Int) -> Int {
+        if (currentDataToHide!.length > currentCharacter!) {
+            let currData = currentDataToHide! as NSString
+            let asciiCode = currData.character(at: currentCharacter!)
             
-            let shiftedBits: UInt8 = asciiCode >> currentShift
+            let shiftedBits = asciiCode >> currentShift!
             
             if (currentShift == 0) {
-                currentShift = INITIAL_SHIFT;
-                currentCharacter += 1
+                currentShift = INITIAL_SHIFT
+                currentCharacter! += 1
             } else {
-                currentShift -= 1
+                currentShift! -= 1
             }
             
             return new(pixel: color, shiftedBits: Int(shiftedBits), shift: colorToStep(step: step))
@@ -147,9 +145,19 @@ class Encoder {
         return color
     }
     
-    func new(pixel: Int, shiftedBits: Int, shift: Int) -> Int {
+    private func new(pixel: Int, shiftedBits: Int, shift: Int) -> Int {
         let bit = (shiftedBits & 1) << 8 * shift
         let colorAndNot = (pixel & ~(1 << 8 * shift))
         return colorAndNot | bit
+    }
+    
+    private func messageToHide(string: String) -> String {
+        let base64 = base64FromString(string)
+        return DATA_PREFIX + base64 + DATA_SUFFIX
+    }
+    
+    private func base64FromString(_ string: String) -> String {
+        let data = string.data(using: .utf8)
+        return (data?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))!
     }
 }
