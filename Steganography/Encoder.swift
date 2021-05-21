@@ -12,6 +12,16 @@ let BYTES_PER_PIXEL = 4
 let BYTES_OF_LENGTH = 4
 let INITIAL_SHIFT = 7
 
+func colorToStep(step: Int) -> Int {
+    if (step % 3 == 0) {
+        return 2
+    } else if (step % 2 == 0) {
+        return 1
+    } else {
+        return 0
+    }
+}
+
 class Encoder {
     var currentShift = INITIAL_SHIFT
     var currentCharacter = 0
@@ -52,6 +62,8 @@ class Encoder {
                 error = NSError(domain: "ISStegoErrorDomain", code: 2, userInfo: [NSLocalizedDescriptionKey : "Image is too small"])
             }
         }
+        
+        pixels.deallocate()
         
         return processedImage
     }
@@ -139,15 +151,5 @@ class Encoder {
         let bit = (shiftedBits & 1) << 8 * shift
         let colorAndNot = (pixel & ~(1 << 8 * shift))
         return colorAndNot | bit
-    }
-    
-    func colorToStep(step: Int) -> Int {
-        if (step % 3 == 0) {
-            return 2
-        } else if (step % 2 == 0) {
-            return 1
-        } else {
-            return 0
-        }
     }
 }
