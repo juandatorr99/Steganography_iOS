@@ -10,6 +10,7 @@ import MobileCoreServices
 import UniformTypeIdentifiers
 
 class HideViewController: UIViewController, UIDocumentPickerDelegate {
+    private let PLACEHOLDER = "Ingresa el mensaje"
     
     @IBOutlet weak var buttonChoose: UIButton!
     @IBOutlet weak var buttonCamera: UIButton!
@@ -20,7 +21,7 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
-        textView.text = "Ingresa el mensaje"
+        textView.text = PLACEHOLDER
         textView.textColor = UIColor.lightGray
         
         buttonChoose.clipsToBounds = true
@@ -52,18 +53,18 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
     }
     
     @IBAction func clickButtonHide(_ sender: Any) {
-        let binaryData = Data(textView.text.utf8)
-        let stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
-            var transformed = String(byte, radix: 2)
-            while transformed.count < 8 {
-                transformed = "0" + transformed
-            }
-            return acc + transformed
-        }
+//        let binaryData = Data(textView.text.utf8)
+//        let stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
+//            var transformed = String(byte, radix: 2)
+//            while transformed.count < 8 {
+//                transformed = "0" + transformed
+//            }
+//            return acc + transformed
+//        }
         
-        print(stringOf01)
         encodeMessage()
     }
+    
     func selectFiles() {
         let types = UTType.types(tag: "png",
                                  tagClass: UTTagClass.filenameExtension,
@@ -80,13 +81,12 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
         picker.sourceType = sourceType
         present(picker, animated: true)
     }
-    func encodeMessage(){
-        
+    
+   private func encodeMessage(){
         let resultingImage = Encoder().encode(image: imageHide.image!, text: textView.text)!
         
-
         let imageToShare = [ resultingImage.pngData() ]
-        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+    let activityViewController = UIActivityViewController(activityItems: imageToShare as [Any], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
 
         // exclude some activity types from the list (optional)
@@ -94,7 +94,6 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
 
         // present the view controller
         self.present(activityViewController, animated: true, completion: nil)
-        print("SAVED")
     }
     
     
@@ -141,16 +140,15 @@ extension HideViewController: UIImagePickerControllerDelegate, UINavigationContr
 }
 
 extension CGImage {
-    func pixel(x: Int, y: Int) -> (r: Int, g: Int, b: Int)? { // swiftlint:disable:this large_tuple
+    private func pixel(x: Int, y: Int) -> (r: Int, g: Int, b: Int)? {
         guard let pixelData = dataProvider?.data,
               let data = CFDataGetBytePtr(pixelData) else { return nil }
         
         let pixelInfo = ((width  * y) + x ) * 4
         
-        let red = Int(data[pixelInfo])         // If you need this info, enable it
-        let green = Int(data[(pixelInfo + 1)]) // If you need this info, enable it
-        let blue = Int(data[pixelInfo + 2])    // If you need this info, enable it
-        // I need only this info for my maze game
+        let red = Int(data[pixelInfo])
+        let green = Int(data[(pixelInfo + 1)])
+        let blue = Int(data[pixelInfo + 2])
         
         return (red, green, blue)
     }

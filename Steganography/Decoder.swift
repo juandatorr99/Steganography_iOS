@@ -7,17 +7,7 @@
 
 import UIKit
 
-let DATA_PREFIX = "<m>"
-let DATA_SUFFIX = "</m>"
-let INFO_LENGTH = BYTES_OF_LENGTH * BITS_PER_COMPONENT
-
 class Decoder {
-    private var currentShift: Int?
-    private var bitsCharacter: Int?
-    private var text: String?
-    private var step = Int()
-    private var length = Int()
-    
     
     func decode(image:UIImage) -> String? {
         let inputCGImage = image.cgImage!
@@ -30,11 +20,11 @@ class Decoder {
         let bitmapInfo       = RGBA32.bitmapInfo
         
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo) else {
-                print("unable to create context")
-                return nil
-            }
+            print("unable to create context")
+            return nil
+        }
         context.draw(inputCGImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-
+        
         guard let buffer = context.data else {
             print("unable to get context data")
             return nil
@@ -83,7 +73,7 @@ class Decoder {
             }
             i+=1
         }
-        print(result)
+        
         var index = result.startIndex
         var message: String = ""
         for _ in 0..<result.count/8 {
@@ -92,9 +82,7 @@ class Decoder {
             message += String(UnicodeScalar(UInt8(charBits, radix: 2)!))
             index = nextIndex
         }
-        print(message)
         
-         
         return message
     }
 }

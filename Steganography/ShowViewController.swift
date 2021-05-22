@@ -35,8 +35,6 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         let image = info[.originalImage] as! UIImage
         self.imageView.image = image
-        
-        
     }
     
     @IBAction func showButtonClick(_ sender: Any) {
@@ -47,7 +45,6 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     private func showMessage(imageToDecode:UIImage) {
-        
         let text = Decoder().decode(image: imageView.image!)
         labelMessage.text = text
     }
