@@ -32,6 +32,7 @@
 		7405C277263B1F9D005B3553 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7405C279263B1F9D005B3553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		743FEF46264CD53A006519C9 /* ShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowViewController.swift; sourceTree = "<group>"; };
+		74F7733D2658A58E00BC39B3 /* Steganography.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Steganography.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +65,7 @@
 		7405C26A263B1F97005B3553 /* Steganography */ = {
 			isa = PBXGroup;
 			children = (
+				74F7733D2658A58E00BC39B3 /* Steganography.entitlements */,
 				7405C26B263B1F97005B3553 /* AppDelegate.swift */,
 				7405C26D263B1F97005B3553 /* SceneDelegate.swift */,
 				7405C26F263B1F97005B3553 /* HideViewController.swift */,
@@ -306,14 +308,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Steganography/Steganography.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6DS64ZKFJ4;
+				DEVELOPMENT_TEAM = 279TR565BC;
 				INFOPLIST_FILE = Steganography/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sroman98.Steganography;
+				PRODUCT_BUNDLE_IDENTIFIER = com.juandatorr.Steganography;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -325,14 +328,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Steganography/Steganography.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6DS64ZKFJ4;
+				DEVELOPMENT_TEAM = 279TR565BC;
 				INFOPLIST_FILE = Steganography/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sroman98.Steganography;
+				PRODUCT_BUNDLE_IDENTIFIER = com.juandatorr.Steganography;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

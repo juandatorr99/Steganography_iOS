@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Show-->
+        <!--Decode-->
         <scene sceneID="e3I-BX-zWe">
             <objects>
                 <viewController id="jky-tZ-UWz" customClass="ShowViewController" customModule="Steganography" customModuleProvider="target" sceneMemberID="viewController">
@@ -49,42 +49,59 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El mensaje se mostrara aqui!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8em-fK-dQ6">
-                                <rect key="frame" x="30" y="623" width="354" height="180"/>
+                                <rect key="frame" x="30" y="593" width="354" height="160"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0MA-nT-iWV">
+                                <rect key="frame" x="144" y="753" width="126" height="50"/>
+                                <color key="backgroundColor" name="AccentColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="NMu-mY-n8z"/>
+                                </constraints>
+                                <state key="normal" title="Mostrar">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="showButtonClick:" destination="jky-tZ-UWz" eventType="touchUpInside" id="rOK-VL-eNw"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tfn-Fx-oY4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="8em-fK-dQ6" firstAttribute="top" secondItem="afQ-ho-hrl" secondAttribute="bottom" constant="30" id="26L-5n-oiX"/>
                             <constraint firstItem="tfn-Fx-oY4" firstAttribute="trailing" secondItem="8em-fK-dQ6" secondAttribute="trailing" constant="30" id="4N0-Ru-acd"/>
                             <constraint firstItem="tfn-Fx-oY4" firstAttribute="trailing" secondItem="afQ-ho-hrl" secondAttribute="trailing" constant="30" id="6Zk-dg-XEO"/>
+                            <constraint firstItem="tfn-Fx-oY4" firstAttribute="trailing" secondItem="0MA-nT-iWV" secondAttribute="trailing" constant="144" id="886-tu-CMG"/>
                             <constraint firstItem="Vbe-jV-9RB" firstAttribute="top" secondItem="tfn-Fx-oY4" secondAttribute="top" constant="30" id="DZl-LY-ZEm"/>
+                            <constraint firstItem="0MA-nT-iWV" firstAttribute="bottom" secondItem="tfn-Fx-oY4" secondAttribute="bottom" constant="-10" id="MyR-XZ-H8c"/>
                             <constraint firstItem="Vbe-jV-9RB" firstAttribute="leading" secondItem="tfn-Fx-oY4" secondAttribute="leading" constant="30" id="PB5-5B-iaV"/>
                             <constraint firstItem="tfn-Fx-oY4" firstAttribute="trailing" secondItem="xsU-XZ-iLe" secondAttribute="trailing" constant="143" id="UWR-7d-Kxd"/>
                             <constraint firstItem="afQ-ho-hrl" firstAttribute="leading" secondItem="tfn-Fx-oY4" secondAttribute="leading" constant="30" id="iiR-bx-39Q"/>
+                            <constraint firstItem="0MA-nT-iWV" firstAttribute="leading" secondItem="tfn-Fx-oY4" secondAttribute="leading" constant="144" id="jgH-QS-Y5r"/>
                             <constraint firstItem="xsU-XZ-iLe" firstAttribute="top" secondItem="Vbe-jV-9RB" secondAttribute="bottom" constant="26" id="kAR-VZ-eRc"/>
-                            <constraint firstItem="tfn-Fx-oY4" firstAttribute="bottom" secondItem="8em-fK-dQ6" secondAttribute="bottom" constant="10" id="nEG-GY-jKL"/>
+                            <constraint firstItem="8em-fK-dQ6" firstAttribute="top" secondItem="afQ-ho-hrl" secondAttribute="bottom" id="pbY-gT-84n"/>
                             <constraint firstItem="tfn-Fx-oY4" firstAttribute="trailing" secondItem="Vbe-jV-9RB" secondAttribute="trailing" constant="30" id="rnP-1S-Rn2"/>
                             <constraint firstItem="afQ-ho-hrl" firstAttribute="top" secondItem="xsU-XZ-iLe" secondAttribute="bottom" constant="40" id="smx-ip-2Dq"/>
                             <constraint firstItem="8em-fK-dQ6" firstAttribute="leading" secondItem="tfn-Fx-oY4" secondAttribute="leading" constant="30" id="vSQ-Tf-DYP"/>
+                            <constraint firstItem="0MA-nT-iWV" firstAttribute="top" secondItem="8em-fK-dQ6" secondAttribute="bottom" id="wGp-3g-b1K"/>
                             <constraint firstItem="xsU-XZ-iLe" firstAttribute="leading" secondItem="tfn-Fx-oY4" secondAttribute="leading" constant="144" id="zZ9-hX-1qb"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Show" id="T9u-FB-gPk"/>
+                    <navigationItem key="navigationItem" title="Decode" id="T9u-FB-gPk"/>
                     <connections>
                         <outlet property="buttonChooseImage" destination="xsU-XZ-iLe" id="c7S-FG-osP"/>
                         <outlet property="imageView" destination="afQ-ho-hrl" id="8QY-RZ-4fQ"/>
                         <outlet property="labelMessage" destination="8em-fK-dQ6" id="RTp-zo-O8P"/>
+                        <outlet property="showButton" destination="0MA-nT-iWV" id="3L0-8r-n4h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ewk-JX-juL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2873.913043478261" y="649.55357142857144"/>
         </scene>
-        <!--Hide-->
+        <!--Encode-->
         <scene sceneID="4r6-31-vEs">
             <objects>
                 <viewController id="KQf-hr-xeh" customClass="HideViewController" customModule="Steganography" customModuleProvider="target" sceneMemberID="viewController">
@@ -184,7 +201,7 @@
                             <constraint firstItem="KE9-JJ-y6M" firstAttribute="trailing" secondItem="Efn-05-fyc" secondAttribute="trailing" constant="100" id="zby-5l-0Q9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Hide" largeTitleDisplayMode="always" id="1ag-oi-kif"/>
+                    <navigationItem key="navigationItem" title="Encode" largeTitleDisplayMode="always" id="1ag-oi-kif"/>
                     <connections>
                         <outlet property="buttonCamera" destination="Qfg-kG-ZNl" id="VS1-n4-k5c"/>
                         <outlet property="buttonChoose" destination="Ksj-Oc-Fnv" id="QJy-eN-olc"/>
@@ -215,11 +232,11 @@
             </objects>
             <point key="canvasLocation" x="981" y="195"/>
         </scene>
-        <!--Hide-->
+        <!--Encode-->
         <scene sceneID="jZk-2K-YWZ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="snV-Yi-ZZx" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Hide" image="lock" catalog="system" id="K25-TR-GOS"/>
+                    <tabBarItem key="tabBarItem" title="Encode" image="lock" catalog="system" id="K25-TR-GOS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Es5-JM-Q55">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -234,11 +251,11 @@
             </objects>
             <point key="canvasLocation" x="1872.4637681159422" y="-109.15178571428571"/>
         </scene>
-        <!--Show-->
+        <!--Decode-->
         <scene sceneID="haE-UP-usO">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="y6m-aB-TwV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Show" image="lock.open" catalog="system" id="DTx-Hw-p6f"/>
+                    <tabBarItem key="tabBarItem" title="Decode" image="lock.open" catalog="system" id="DTx-Hw-p6f"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZBz-E2-cxb">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

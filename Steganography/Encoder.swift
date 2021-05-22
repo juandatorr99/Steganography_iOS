@@ -29,135 +29,182 @@ class Encoder {
     private var currentDataToHide: String?
     private var step = Int()
     
-    func getStegoImageFor(image: UIImage, text: String, error: inout NSError?) -> UIImage? {
-        let inputCGImage = image.cgImage!
-        let width = inputCGImage.width
-        let height = inputCGImage.height
+    
+    func encode(image: UIImage, text: String) -> UIImage?{
+        UIGraphicsBeginImageContext(image.size)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
+        let copy = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        let inputCGImage = copy!.cgImage!
+        let colorSpace       = CGColorSpaceCreateDeviceRGB()
+        let width            = inputCGImage.width
+        let height           = inputCGImage.height
+        let bytesPerPixel    = 4
+        let bitsPerComponent = 8
+        let bytesPerRow      = bytesPerPixel * width
+        let bitmapInfo       = RGBA32.bitmapInfo
         
-        let size = height * width
-        
-        let pixels = UnsafeMutablePointer<Int>.allocate(capacity: size)
-        var processedImage: UIImage? = nil
-        
-        if size >= MIN_PIXELS {
-            let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
-            
-            let context: CGContext = CGContext(data: pixels,
-                                               width: width,
-                                               height: height,
-                                               bitsPerComponent: BITS_PER_COMPONENT,
-                                               bytesPerRow: BYTES_PER_PIXEL * width,
-                                               space: colorSpace,
-                                               bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue)!
-            
-            context.draw(inputCGImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-            
-            let success = hide(string: text, inPixels: pixels, withSize: size, error: &error)
-            
-            if (success) {
-                let newCGImage: CGImage = context.makeImage()!
-                processedImage = UIImage(cgImage: newCGImage)
-            }
-        } else {
-            error = NSError(domain: "ISStegoErrorDomain", code: 2, userInfo: [NSLocalizedDescriptionKey : "Image is too small"])
+        if width * height * 4 < text.length*8 {
+            print("Error")
+            return nil
+//            return nil
         }
         
-        pixels.deallocate()
+        let pixelData = inputCGImage.dataProvider!.data
+        var flagEnd = 0
         
-        return processedImage
-    }
-    
-    private func hide(string: String, inPixels pixels: UnsafeMutablePointer<Int>, withSize size:Int, error: inout NSError?) -> Bool {
-        var success = false
-        
-        let messageToHide = messageToHide(string: string)
-        
-        var dataLength = messageToHide.length
-        
-        if dataLength <= INT_MAX
-                && dataLength * BITS_PER_COMPONENT < size - INFO_LENGTH {
-            reset()
-            
-            let data: Data = Data(bytes: &dataLength, count: BYTES_OF_LENGTH)
-            
-            let lengthDataInfo: String = String(data: data, encoding: .ascii)!
-            
-            var pixelPosition: Int = 0
-            
-            self.currentDataToHide = lengthDataInfo
-            
-            while (pixelPosition < INFO_LENGTH) {
-                pixels[pixelPosition] = new(pixel: pixels[pixelPosition])
-                pixelPosition += 1
+        let binaryData = Data(text.utf8)
+        var stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
+            var transformed = String(byte, radix: 2)
+            while transformed.count < 8 {
+                transformed = "0" + transformed
             }
-            
-            reset()
-            
-            let pixelsToHide: Int = messageToHide.length * BITS_PER_COMPONENT;
-            
-            self.currentDataToHide = messageToHide
-            
-            let ratio: Int = (size - pixelPosition) / pixelsToHide
-            
-            let salt: Int = ratio;
-            
-            while (pixelPosition <= size) {
-                pixels[pixelPosition] = new(pixel: pixels[pixelPosition])
-                pixelPosition += salt
+            return acc + transformed
+        }
+        stringOf01 += "00000000"
+        print(stringOf01)
+        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo) else {
+                print("unable to create context")
+                return nil
             }
-            
-            success = true
-        } else {
-            error = NSError(domain: "ISStegoErrorDomain", code: 1, userInfo: [NSLocalizedDescriptionKey : "The data is too big"])
+        
+        context.draw(inputCGImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        guard let buffer = context.data else {
+            print("unable to get context data")
+            return nil
+        }
+
+        let pixelBuffer = buffer.bindMemory(to: RGBA32.self, capacity: width * height)
+        
+        for row in 0 ..< Int(width) {
+            for column in 0 ..< Int(height) {
+                let index = row * width + column
+                let indexText = ((row * width) + column) * 3
+                print("Index: \(index) IndexText: \(indexText)")
+                
+                var r = pixelBuffer[index].redComponent
+                var g = pixelBuffer[index].greenComponent
+                var b = pixelBuffer[index].blueComponent
+                let a = pixelBuffer[index].alphaComponent
+                print("R antes: \(r)")
+                if indexText > stringOf01.length {
+                    flagEnd = 1
+                    pixelBuffer[index] = RGBA32(red: r, green: g,   blue: b,   alpha: a)
+                    break
+                }
+               
+                if stringOf01[indexText] == "0" {
+                    r = r & ~1
+                }else{
+                    r = r | 1
+                }
+                
+                if indexText+1 > stringOf01.length{
+                    flagEnd = 1
+                    pixelBuffer[index] = RGBA32(red: r, green: g,   blue: b,   alpha: a)
+                    break
+                }
+                
+                if stringOf01[indexText+1] == "0" {
+                    g = g & ~1
+                }else{
+                    g = g | 1
+                }
+                
+                if indexText > stringOf01.length {
+                    flagEnd = 1
+                    pixelBuffer[index] = RGBA32(red: r, green: g,   blue: b,   alpha: a)
+                    break
+                }
+                
+                if stringOf01[indexText+2] == "0" {
+                    b = b & ~1
+                }else{
+                    b = b | 1
+                }
+                
+                
+                pixelBuffer[index] = RGBA32(red: r, green: g,   blue: b,   alpha: a)
+                print("R despues: \(r)")
+            }
+            if flagEnd == 1 {
+                
+                break
+            }
         }
         
-        return success;
+        print("final r \(pixelBuffer[0].redComponent)")
+        
+        let outputCGImage = context.makeImage()!
+        let outputImage = UIImage(cgImage: outputCGImage)
+        
+        return outputImage
+        
     }
     
-    private func reset() {
-        currentShift = INITIAL_SHIFT
-        currentCharacter = 0
+    
+}
+
+
+extension String {
+    var length: Int {
+        return count
     }
     
-    private func new(pixel: Int) -> Int {
-        let color: Int = new(color: pixel)
-        step += 1
-        return color
+    subscript (i: Int) -> String {
+        return self[i ..< i + 1]
+    }
+    
+    func substring(fromIndex: Int) -> String {
+        return self[min(fromIndex, length) ..< length]
+    }
+    
+    func substring(toIndex: Int) -> String {
+        return self[0 ..< max(0, toIndex)]
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        let range = Range(uncheckedBounds: (lower: max(0, min(length, r.lowerBound)),
+                                            upper: min(length, max(0, r.upperBound))))
+        let start = index(startIndex, offsetBy: range.lowerBound)
+        let end = index(start, offsetBy: range.upperBound - range.lowerBound)
+        return String(self[start ..< end])
+    }
+}
+
+struct RGBA32: Equatable {
+    private var color: UInt32
+
+    var redComponent: UInt8 {
+        return UInt8((color >> 24) & 255)
     }
 
-    private func new(color: Int) -> Int {
-        if (currentDataToHide!.length > currentCharacter!) {
-            let currData = currentDataToHide! as NSString
-            let asciiCode = currData.character(at: currentCharacter!)
-            
-            let shiftedBits = asciiCode >> currentShift!
-            
-            if (currentShift == 0) {
-                currentShift = INITIAL_SHIFT
-                currentCharacter! += 1
-            } else {
-                currentShift! -= 1
-            }
-            
-            return new(pixel: color, shiftedBits: Int(shiftedBits), shift: colorToStep(step: step))
-        }
-        
-        return color
+    var greenComponent: UInt8 {
+        return UInt8((color >> 16) & 255)
     }
-    
-    private func new(pixel: Int, shiftedBits: Int, shift: Int) -> Int {
-        let bit = (shiftedBits & 1) << 8 * shift
-        let colorAndNot = (pixel & ~(1 << 8 * shift))
-        return colorAndNot | bit
+
+    var blueComponent: UInt8 {
+        return UInt8((color >> 8) & 255)
     }
-    
-    private func messageToHide(string: String) -> String {
-        let base64 = base64FromString(string)
-        return DATA_PREFIX + base64 + DATA_SUFFIX
+
+    var alphaComponent: UInt8 {
+        return UInt8((color >> 0) & 255)
     }
+
+    init(red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {
+        let red   = UInt32(red)
+        let green = UInt32(green)
+        let blue  = UInt32(blue)
+        let alpha = UInt32(alpha)
+        color = (red << 24) | (green << 16) | (blue << 8) | (alpha << 0)
+    }
+
     
-    private func base64FromString(_ string: String) -> String {
-        let data = string.data(using: .utf8)
-        return (data?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0)))!
+
+    static let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
+
+    static func ==(lhs: RGBA32, rhs: RGBA32) -> Bool {
+        return lhs.color == rhs.color
     }
 }

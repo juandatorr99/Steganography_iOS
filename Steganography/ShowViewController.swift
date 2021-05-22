@@ -9,6 +9,7 @@ import UIKit
 
 class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var showButton: UIButton!
     @IBOutlet weak var buttonChooseImage: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var labelMessage: UILabel!
@@ -17,6 +18,9 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         super.viewDidLoad()
         buttonChooseImage.clipsToBounds = true
         buttonChooseImage.layer.cornerRadius = 10
+        
+        showButton.clipsToBounds = true
+        showButton.layer.cornerRadius = 10
     }
     
     func presentPicker(with sourceType: UIImagePickerController.SourceType) {
@@ -32,20 +36,19 @@ class ShowViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let image = info[.originalImage] as! UIImage
         self.imageView.image = image
         
-        showMessage()
+        
     }
     
+    @IBAction func showButtonClick(_ sender: Any) {
+        showMessage(imageToDecode: self.imageView.image!)
+    }
     @IBAction func clickChooseImage(_ sender: Any) {
         presentPicker(with: .photoLibrary)
     }
     
-    private func showMessage() {
-        var error: NSError?
-        let text = Decoder().decodeStegoImage(image: imageView.image!, error: &error)
-        if error != nil {
-            labelMessage.text = error!.description
-        } else {
-            labelMessage.text = text
-        }
+    private func showMessage(imageToDecode:UIImage) {
+        
+        let text = Decoder().decode(image: imageView.image!)
+        labelMessage.text = text
     }
 }

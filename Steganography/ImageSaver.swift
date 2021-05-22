@@ -18,6 +18,7 @@ class ImageSaver: NSObject {
         UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
     }
 
+        
     @objc func saveError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         print("Save finished!")
     }

@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import MobileCoreServices
+import UniformTypeIdentifiers
 
-class HideViewController: UIViewController {
+class HideViewController: UIViewController, UIDocumentPickerDelegate {
     
     @IBOutlet weak var buttonChoose: UIButton!
     @IBOutlet weak var buttonCamera: UIButton!
@@ -50,7 +52,26 @@ class HideViewController: UIViewController {
     }
     
     @IBAction func clickButtonHide(_ sender: Any) {
-        hideMessage()
+        let binaryData = Data(textView.text.utf8)
+        let stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
+            var transformed = String(byte, radix: 2)
+            while transformed.count < 8 {
+                transformed = "0" + transformed
+            }
+            return acc + transformed
+        }
+        
+        print(stringOf01)
+        encodeMessage()
+    }
+    func selectFiles() {
+        let types = UTType.types(tag: "png",
+                                 tagClass: UTTagClass.filenameExtension,
+                                 conformingTo: nil)
+        let documentPickerController = UIDocumentPickerViewController(
+                forOpeningContentTypes: types)
+        documentPickerController.delegate = self
+        self.present(documentPickerController, animated: true, completion: nil)
     }
     
     private func presentPicker(with sourceType: UIImagePickerController.SourceType) {
@@ -59,17 +80,23 @@ class HideViewController: UIViewController {
         picker.sourceType = sourceType
         present(picker, animated: true)
     }
-    
-    private func hideMessage() {
-        var error: NSError?
-        let portingImage = Encoder().getStegoImageFor(image: imageHide.image!, text: textView.text, error: &error)
-        if error == nil {
-            ImageSaver.writeToPhotoAlbum(image: portingImage!)
-            print("SAVED")
-        } else {
-            print(error!.localizedDescription)
-        }
+    func encodeMessage(){
+        
+        let resultingImage = Encoder().encode(image: imageHide.image!, text: textView.text)!
+        
+
+        let imageToShare = [ resultingImage.pngData() ]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+
+        // exclude some activity types from the list (optional)
+        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+
+        // present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
+        print("SAVED")
     }
+    
     
     private func setupHideKeyboardOnTap() {
         self.view.addGestureRecognizer(self.endEditingRecognizer())
@@ -126,31 +153,5 @@ extension CGImage {
         // I need only this info for my maze game
         
         return (red, green, blue)
-    }
-}
-
-extension String {
-    var length: Int {
-        return count
-    }
-    
-    subscript (i: Int) -> String {
-        return self[i ..< i + 1]
-    }
-    
-    func substring(fromIndex: Int) -> String {
-        return self[min(fromIndex, length) ..< length]
-    }
-    
-    func substring(toIndex: Int) -> String {
-        return self[0 ..< max(0, toIndex)]
-    }
-    
-    subscript (r: Range<Int>) -> String {
-        let range = Range(uncheckedBounds: (lower: max(0, min(length, r.lowerBound)),
-                                            upper: min(length, max(0, r.upperBound))))
-        let start = index(startIndex, offsetBy: range.lowerBound)
-        let end = index(start, offsetBy: range.upperBound - range.lowerBound)
-        return String(self[start ..< end])
     }
 }
