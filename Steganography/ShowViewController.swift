@@ -21,6 +21,10 @@ class ShowViewController: UIViewController {
         
         showButton.clipsToBounds = true
         showButton.layer.cornerRadius = 10
+        
+        showButton.isEnabled = false
+        showButton.isOpaque = true
+        showButton.isHidden = true
     }
     
     @IBAction func didTapShowMessage(_ sender: Any) {
@@ -49,6 +53,9 @@ extension ShowViewController: UIImagePickerControllerDelegate, UINavigationContr
 
         let image = info[.originalImage] as! UIImage
         self.imageView.image = image
+        showButton.isEnabled = true
+        showButton.isOpaque = false
+        showButton.isHidden = false
     }
     
     private func presentPicker(with sourceType: UIImagePickerController.SourceType) {

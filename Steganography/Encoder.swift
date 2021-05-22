@@ -36,7 +36,7 @@ class Encoder {
             }
             return acc + transformed
         }
-        binaryString += "00000000"
+        binaryString = "00000000" + binaryString + "00000000"
 
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: BitsPerComponent, bytesPerRow: bytesPerRow, space: ColorSpace, bitmapInfo: BitmapInfo) else {
             print("Error: unable to create context")

@@ -27,9 +27,33 @@ class Decoder {
         }
         
         let pixelBuffer = buffer.bindMemory(to: RGBA32.self, capacity: width * height)
-        var result = ""
-        var i = 0
-        var count = 0
+        
+        //Check if first values are 0
+        var indexCheck = 0
+        while indexCheck < 2 {
+            
+            if pixelBuffer[indexCheck].redComponent & 1 == 1 {
+                return nil
+            }
+            
+            if pixelBuffer[indexCheck].greenComponent & 1 == 1  {
+                return nil
+            }
+            
+            if pixelBuffer[indexCheck].blueComponent & 1 == 1 && indexCheck != 2  {
+                return nil
+            }
+            indexCheck += 1
+        }
+        var count = 1
+        var result = "0"
+        if pixelBuffer[2].blueComponent & 1 == 1{
+            result = "1"
+            count = 0
+        }
+        
+        var i = 3
+        
         while true {
             var lr = "0"
             var lg = "0"

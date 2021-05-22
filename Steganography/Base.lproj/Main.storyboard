@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Decode-->
+        <!--Revelar-->
         <scene sceneID="e3I-BX-zWe">
             <objects>
                 <viewController id="jky-tZ-UWz" customClass="ShowViewController" customModule="Steganography" customModuleProvider="target" sceneMemberID="viewController">
@@ -59,7 +59,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="NMu-mY-n8z"/>
                                 </constraints>
-                                <state key="normal" title="Mostrar">
+                                <state key="normal" title="Revelar">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -88,7 +88,7 @@
                             <constraint firstItem="0MA-nT-iWV" firstAttribute="top" secondItem="8em-fK-dQ6" secondAttribute="bottom" constant="25" id="wGp-3g-b1K"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Decode" id="T9u-FB-gPk"/>
+                    <navigationItem key="navigationItem" title="Revelar" id="T9u-FB-gPk"/>
                     <connections>
                         <outlet property="chooseImgButton" destination="xsU-XZ-iLe" id="c7S-FG-osP"/>
                         <outlet property="imageView" destination="afQ-ho-hrl" id="8QY-RZ-4fQ"/>
@@ -100,7 +100,7 @@
             </objects>
             <point key="canvasLocation" x="2873.913043478261" y="649.55357142857144"/>
         </scene>
-        <!--Encode-->
+        <!--Ocultar-->
         <scene sceneID="4r6-31-vEs">
             <objects>
                 <viewController id="KQf-hr-xeh" customClass="HideViewController" customModule="Steganography" customModuleProvider="target" sceneMemberID="viewController">
@@ -199,7 +199,7 @@
                             <constraint firstItem="PvL-ec-TFn" firstAttribute="top" secondItem="Ggd-Rk-s5h" secondAttribute="bottom" constant="25" id="re8-ZL-4aC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Encode" largeTitleDisplayMode="always" id="1ag-oi-kif"/>
+                    <navigationItem key="navigationItem" title="Ocultar" largeTitleDisplayMode="always" id="1ag-oi-kif"/>
                     <connections>
                         <outlet property="cameraButton" destination="Qfg-kG-ZNl" id="VS1-n4-k5c"/>
                         <outlet property="chooseImgButton" destination="Ksj-Oc-Fnv" id="QJy-eN-olc"/>
@@ -230,11 +230,11 @@
             </objects>
             <point key="canvasLocation" x="981" y="195"/>
         </scene>
-        <!--Encode-->
+        <!--Ocultar-->
         <scene sceneID="jZk-2K-YWZ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="snV-Yi-ZZx" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Encode" image="lock" catalog="system" id="K25-TR-GOS"/>
+                    <tabBarItem key="tabBarItem" title="Ocultar" image="lock" catalog="system" id="K25-TR-GOS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Es5-JM-Q55">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -249,11 +249,11 @@
             </objects>
             <point key="canvasLocation" x="1872.4637681159422" y="-109.15178571428571"/>
         </scene>
-        <!--Decode-->
+        <!--Revelar-->
         <scene sceneID="haE-UP-usO">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="y6m-aB-TwV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Decode" image="lock.open" catalog="system" id="DTx-Hw-p6f"/>
+                    <tabBarItem key="tabBarItem" title="Revelar" image="lock.open" catalog="system" id="DTx-Hw-p6f"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZBz-E2-cxb">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
