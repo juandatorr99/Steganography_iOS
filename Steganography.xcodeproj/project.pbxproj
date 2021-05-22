@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		142B8779265972110073912B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B8778265972110073912B /* String.swift */; };
+		142B877B2659723A0073912B /* RGBA32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B877A2659723A0073912B /* RGBA32.swift */; };
 		148072BF2656F88F00E2873B /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148072BE2656F88F00E2873B /* Encoder.swift */; };
 		148072C126571F0600E2873B /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 148072C026571F0600E2873B /* Decoder.swift */; };
 		7405C26C263B1F97005B3553 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7405C26B263B1F97005B3553 /* AppDelegate.swift */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		142B8778265972110073912B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		142B877A2659723A0073912B /* RGBA32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBA32.swift; sourceTree = "<group>"; };
 		148072BE2656F88F00E2873B /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		148072C026571F0600E2873B /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
 		7405C268263B1F97005B3553 /* Steganography.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Steganography.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +48,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		142B8777265971FF0073912B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				142B8778265972110073912B /* String.swift */,
+				142B877A2659723A0073912B /* RGBA32.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		7405C25F263B1F97005B3553 = {
 			isa = PBXGroup;
 			children = (
@@ -63,6 +76,7 @@
 		7405C26A263B1F97005B3553 /* Steganography */ = {
 			isa = PBXGroup;
 			children = (
+				142B8777265971FF0073912B /* Extensions */,
 				74F7733D2658A58E00BC39B3 /* Steganography.entitlements */,
 				7405C26B263B1F97005B3553 /* AppDelegate.swift */,
 				7405C26D263B1F97005B3553 /* SceneDelegate.swift */,
@@ -152,10 +166,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				142B877B2659723A0073912B /* RGBA32.swift in Sources */,
 				7405C270263B1F97005B3553 /* HideViewController.swift in Sources */,
 				7405C26C263B1F97005B3553 /* AppDelegate.swift in Sources */,
 				148072BF2656F88F00E2873B /* Encoder.swift in Sources */,
 				148072C126571F0600E2873B /* Decoder.swift in Sources */,
+				142B8779265972110073912B /* String.swift in Sources */,
 				7405C26E263B1F97005B3553 /* SceneDelegate.swift in Sources */,
 				743FEF47264CD53A006519C9 /* ShowViewController.swift in Sources */,
 			);

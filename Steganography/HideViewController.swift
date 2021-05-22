@@ -53,46 +53,31 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
     }
     
     @IBAction func clickButtonHide(_ sender: Any) {
-//        let binaryData = Data(textView.text.utf8)
-//        let stringOf01 = binaryData.reduce("") { (acc, byte) -> String in
-//            var transformed = String(byte, radix: 2)
-//            while transformed.count < 8 {
-//                transformed = "0" + transformed
-//            }
-//            return acc + transformed
-//        }
-        
         encodeMessage()
     }
     
-    func selectFiles() {
-        let types = UTType.types(tag: "png",
-                                 tagClass: UTTagClass.filenameExtension,
-                                 conformingTo: nil)
-        let documentPickerController = UIDocumentPickerViewController(
-                forOpeningContentTypes: types)
-        documentPickerController.delegate = self
-        self.present(documentPickerController, animated: true, completion: nil)
-    }
+//    func selectFiles() {
+//        let types = UTType.types(tag: "png",
+//                                 tagClass: UTTagClass.filenameExtension,
+//                                 conformingTo: nil)
+//        let documentPickerController = UIDocumentPickerViewController(
+//            forOpeningContentTypes: types)
+//        documentPickerController.delegate = self
+//        self.present(documentPickerController, animated: true, completion: nil)
+//    }
     
-    private func presentPicker(with sourceType: UIImagePickerController.SourceType) {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.sourceType = sourceType
-        present(picker, animated: true)
-    }
-    
-   private func encodeMessage(){
-        let resultingImage = Encoder().encode(image: imageHide.image!, text: textView.text)!
+    private func encodeMessage() {
+        guard let resultingImage = Encoder.encode(image: imageHide.image!, text: textView.text) else {
+            showAlert()
+            return
+        }
         
-        let imageToShare = [ resultingImage.pngData() ]
-    let activityViewController = UIActivityViewController(activityItems: imageToShare as [Any], applicationActivities: nil)
-        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
-
-        // exclude some activity types from the list (optional)
-        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
-
-        // present the view controller
+        let imageToShare = [resultingImage.pngData()]
+        let activityViewController = UIActivityViewController(activityItems: imageToShare as [Any], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view // iPad support
+        
+        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.openInIBooks]
+        
         self.present(activityViewController, animated: true, completion: nil)
     }
     
@@ -107,6 +92,12 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
         tap.cancelsTouchesInView = false
         return tap
     }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Error", message: "No se pudo ocultar tu mensaje en la seleccionada. Por favor intenta de nuevo.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension HideViewController: UITextViewDelegate {
@@ -119,7 +110,7 @@ extension HideViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Ingresa el mensaje"
+            textView.text = PLACEHOLDER
             textView.textColor = UIColor.lightGray
             buttonHide.isHidden = true
         } else {
@@ -129,6 +120,13 @@ extension HideViewController: UITextViewDelegate {
 }
 
 extension HideViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    private func presentPicker(with sourceType: UIImagePickerController.SourceType) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = sourceType
+        present(picker, animated: true)
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         
@@ -136,20 +134,5 @@ extension HideViewController: UIImagePickerControllerDelegate, UINavigationContr
         imageHide.image = image
         
         textView.isHidden = false
-    }
-}
-
-extension CGImage {
-    private func pixel(x: Int, y: Int) -> (r: Int, g: Int, b: Int)? {
-        guard let pixelData = dataProvider?.data,
-              let data = CFDataGetBytePtr(pixelData) else { return nil }
-        
-        let pixelInfo = ((width  * y) + x ) * 4
-        
-        let red = Int(data[pixelInfo])
-        let green = Int(data[(pixelInfo + 1)])
-        let blue = Int(data[pixelInfo + 2])
-        
-        return (red, green, blue)
     }
 }
