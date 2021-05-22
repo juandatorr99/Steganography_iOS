@@ -37,8 +37,8 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="clickButtonChoose:" destination="KQf-hr-xeh" eventType="touchUpInside" id="DaZ-c6-z51"/>
-                                    <action selector="clickChooseImage:" destination="jky-tZ-UWz" eventType="touchUpInside" id="abf-UN-JoL"/>
+                                    <action selector="didTapChooseImage:" destination="KQf-hr-xeh" eventType="touchUpInside" id="DaZ-c6-z51"/>
+                                    <action selector="didTapChooseImage:" destination="jky-tZ-UWz" eventType="touchUpInside" id="abf-UN-JoL"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="afQ-ho-hrl">
@@ -63,7 +63,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="showButtonClick:" destination="jky-tZ-UWz" eventType="touchUpInside" id="rOK-VL-eNw"/>
+                                    <action selector="didTapShowMessage:" destination="jky-tZ-UWz" eventType="touchUpInside" id="rOK-VL-eNw"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -90,7 +90,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Decode" id="T9u-FB-gPk"/>
                     <connections>
-                        <outlet property="buttonChooseImage" destination="xsU-XZ-iLe" id="c7S-FG-osP"/>
+                        <outlet property="chooseImgButton" destination="xsU-XZ-iLe" id="c7S-FG-osP"/>
                         <outlet property="imageView" destination="afQ-ho-hrl" id="8QY-RZ-4fQ"/>
                         <outlet property="labelMessage" destination="8em-fK-dQ6" id="RTp-zo-O8P"/>
                         <outlet property="showButton" destination="0MA-nT-iWV" id="3L0-8r-n4h"/>
@@ -131,7 +131,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="clickButtonChoose:" destination="KQf-hr-xeh" eventType="touchUpInside" id="s7P-hJ-Xi5"/>
+                                            <action selector="didTapChooseImage:" destination="KQf-hr-xeh" eventType="touchUpInside" id="s7P-hJ-Xi5"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qfg-kG-ZNl">
@@ -145,7 +145,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="clickButtonCamera:" destination="KQf-hr-xeh" eventType="touchUpInside" id="ePX-bj-S3j"/>
+                                            <action selector="didTapTakePhoto:" destination="KQf-hr-xeh" eventType="touchUpInside" id="ePX-bj-S3j"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -174,7 +174,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="clickButtonHide:" destination="KQf-hr-xeh" eventType="touchUpInside" id="zQQ-WK-geH"/>
+                                    <action selector="didTapHideMessage:" destination="KQf-hr-xeh" eventType="touchUpInside" id="zQQ-WK-geH"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -201,10 +201,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Encode" largeTitleDisplayMode="always" id="1ag-oi-kif"/>
                     <connections>
-                        <outlet property="buttonCamera" destination="Qfg-kG-ZNl" id="VS1-n4-k5c"/>
-                        <outlet property="buttonChoose" destination="Ksj-Oc-Fnv" id="QJy-eN-olc"/>
-                        <outlet property="buttonHide" destination="Efn-05-fyc" id="Qyw-UP-WBb"/>
-                        <outlet property="imageHide" destination="L63-5E-yM1" id="grC-6Y-Ufh"/>
+                        <outlet property="cameraButton" destination="Qfg-kG-ZNl" id="VS1-n4-k5c"/>
+                        <outlet property="chooseImgButton" destination="Ksj-Oc-Fnv" id="QJy-eN-olc"/>
+                        <outlet property="hideButton" destination="Efn-05-fyc" id="Qyw-UP-WBb"/>
+                        <outlet property="imageView" destination="L63-5E-yM1" id="grC-6Y-Ufh"/>
                         <outlet property="textView" destination="mRg-Ka-gpq" id="3F2-E3-qfv"/>
                     </connections>
                 </viewController>

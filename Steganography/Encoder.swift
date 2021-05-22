@@ -8,10 +8,6 @@
 import UIKit
 
 class Encoder {
-    private static let colorSpace = CGColorSpaceCreateDeviceRGB()
-    private static let bytesPerPixel = 4
-    private static let bitsPerComponent = 8
-    private static let bitmapInfo = RGBA32.bitmapInfo
     
     static func encode(image: UIImage, text: String) -> UIImage? {
         UIGraphicsBeginImageContext(image.size)
@@ -23,9 +19,9 @@ class Encoder {
         let inputCGImage = copy!.cgImage!
         let width = inputCGImage.width
         let height = inputCGImage.height
-        let bytesPerRow = bytesPerPixel * width
+        let bytesPerRow = BytesPerPixel * width
         
-        if width * height * bytesPerPixel < text.count * bitsPerComponent {
+        if width * height * BytesPerPixel < text.count * BitsPerComponent {
             print("Error: you need a larger image or a smaller text")
             return nil
         }
@@ -35,14 +31,14 @@ class Encoder {
         let binaryData = Data(text.utf8)
         var binaryString = binaryData.reduce("") { (acc, byte) -> String in
             var transformed = String(byte, radix: 2)
-            while transformed.count < bitsPerComponent {
+            while transformed.count < BitsPerComponent {
                 transformed = "0" + transformed
             }
             return acc + transformed
         }
         binaryString += "00000000"
 
-        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo) else {
+        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: BitsPerComponent, bytesPerRow: bytesPerRow, space: ColorSpace, bitmapInfo: BitmapInfo) else {
             print("Error: unable to create context")
             return nil
         }
