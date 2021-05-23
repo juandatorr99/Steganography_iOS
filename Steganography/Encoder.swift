@@ -21,7 +21,7 @@ class Encoder {
         let height = inputCGImage.height
         let bytesPerRow = BytesPerPixel * width
         
-        if width * height * BytesPerPixel < text.count * BitsPerComponent {
+        if width * height * BytesPerPixel < (2 + text.count) * BitsPerComponent {
             print("Error: you need a larger image or a smaller text")
             return nil
         }
