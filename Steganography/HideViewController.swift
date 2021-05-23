@@ -67,7 +67,7 @@ class HideViewController: UIViewController, UIDocumentPickerDelegate {
         let activityViewController = UIActivityViewController(activityItems: imageToShare as [Any], applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = self.view // iPad support
         
-        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.openInIBooks]
+        activityViewController.excludedActivityTypes = [UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.assignToContact, UIActivity.ActivityType.openInIBooks,UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.message,UIActivity.ActivityType.postToWeibo,UIActivity.ActivityType.print,UIActivity.ActivityType.assignToContact,UIActivity.ActivityType.addToReadingList,UIActivity.ActivityType.postToTencentWeibo,UIActivity.ActivityType.postToVimeo,UIActivity.ActivityType.postToFlickr,UIActivity.ActivityType.copyToPasteboard]
         
         self.present(activityViewController, animated: true, completion: nil)
     }
